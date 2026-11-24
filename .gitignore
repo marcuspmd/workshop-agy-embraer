@@ -1,0 +1,17 @@
+# Gerados no lab pelo /my-task init e pelo trabalho do agy
+.audit/
+.ai/
+.agents/hooks.json
+.agents/rules/my-task-*
+.agents/agents/my-task-*
+.agents/mcp_config.json
+AUDIT.md
+.my-task/
+painel-agent/.env
+painel-agent/.venv/
+frota-api/.venv/
+.venv/
+__pycache__/
+node_modules/
+.DS_Store
+.pytest_cache/

@@ -1,0 +1,22 @@
+[
+  {"name": "ts", "type": "TIMESTAMP", "mode": "REQUIRED", "description": "Quando o evento aconteceu (UTC)"},
+  {"name": "participante", "type": "STRING", "description": "Nome informado no conectar-painel"},
+  {"name": "projeto_gcp", "type": "STRING", "description": "Projeto Google Cloud de onde o evento veio"},
+  {"name": "workspace", "type": "STRING", "description": "Pasta do workspace do agy"},
+  {"name": "conversa", "type": "STRING", "description": "ID da conversa do agy"},
+  {"name": "seq", "type": "INTEGER", "description": "Posição do evento na trilha local"},
+  {"name": "evento", "type": "STRING", "description": "SessionStart, PreToolUse, PostToolUse, PostInvocation, Stop, QualityGate, HumanReview, AuditInstalled, StandardsRefreshed, PainelConectado"},
+  {"name": "ator", "type": "STRING", "description": "ai-agent ou human"},
+  {"name": "modelo", "type": "STRING"},
+  {"name": "ferramenta", "type": "STRING", "description": "Ferramenta do agy (run_command, write_to_file, invoke_subagent...) ou de MCP"},
+  {"name": "decisao", "type": "STRING", "description": "allow, deny ou ask, nos eventos PreToolUse"},
+  {"name": "motivo", "type": "STRING", "description": "Motivo do bloqueio"},
+  {"name": "resultado", "type": "STRING", "description": "QualityGate: passou, falhou, inconclusivo. HumanReview: a decisão"},
+  {"name": "arquivos", "type": "STRING", "mode": "REPEATED", "description": "Arquivos alterados pela ação"},
+  {"name": "pedido", "type": "STRING", "description": "Pedido do usuário (até 500 caracteres)"},
+  {"name": "task", "type": "STRING", "description": "Projeto e título do plano mais recente, ex.: frota-api: horas de voo"},
+  {"name": "detalhe", "type": "STRING", "description": "Resumo dos argumentos da ferramenta (JSON, até 1500 caracteres)"},
+  {"name": "hash", "type": "STRING", "description": "Hash do evento na cadeia local"},
+  {"name": "prev_hash", "type": "STRING", "description": "Hash do evento anterior na cadeia local"},
+  {"name": "recebido_em", "type": "TIMESTAMP", "description": "Quando o painel central recebeu (só no projeto central)"}
+]

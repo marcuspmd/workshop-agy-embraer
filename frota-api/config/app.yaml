@@ -1,0 +1,12 @@
+# Configuração da frota-api. Valores de ambiente (segredos, URLs) nunca entram aqui.
+api:
+  titulo: "frota-api"
+  prefixo: "/api/v1"
+paginacao:
+  tamanho_padrao: 50
+  tamanho_maximo: 200
+consultas:
+  periodo_maximo_dias: 366      # filtros de data com intervalo maior que isso retornam erro 422
+banco:
+  schema: "db/schema.sql"
+  seed: "db/seed.sql"

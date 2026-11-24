@@ -1,0 +1,115 @@
+{
+  "language": "pt-BR",
+  "grill": {
+    "max_questions": 10
+  },
+  "execution": {
+    "auto_start": true,
+    "max_continues": 30
+  },
+  "tasks": {
+    "dir": ".my-task"
+  },
+  "commands": {
+    "test": null
+  },
+  "standards": {
+    "stack": "auto",
+    "architecture": {
+      "style": "seguir-o-projeto",
+      "notes": ""
+    },
+    "test_types": [
+      "unitario"
+    ],
+    "coverage": {
+      "min": 0,
+      "command": null
+    },
+    "conventions": [],
+    "allow_dependencies": true,
+    "require_req_in_test_names": true,
+    "max_function_lines": 40
+  },
+  "always_criteria": [
+    "Os testes do projeto passam com o comando de testes do config (commands.test)",
+    "Todo REQ do PLAN.md aparece no nome de pelo menos um teste",
+    "Nenhum segredo, chave ou token no código nem no repositório",
+    "Erros são tratados e chegam ao usuário como mensagem clara, nunca como falha silenciosa"
+  ],
+  "agents": {
+    "enabled": true,
+    "max_parallel": 2,
+    "independent_verifier": true,
+    "models": {
+      "explore": "inherit",
+      "test_writer": "inherit",
+      "implement": "inherit",
+      "verifier": "inherit"
+    }
+  },
+  "quality_gate": {
+    "enabled": true,
+    "command": null,
+    "when_exists": [],
+    "max_retries": 3,
+    "timeout_seconds": 120
+  },
+  "audit": {
+    "archive_transcripts": true
+  },
+  "policy": {
+    "blocked_commands": [
+      {
+        "pattern": "\\bsudo\\b",
+        "reason": "Comandos com sudo não são permitidos neste workspace."
+      },
+      {
+        "pattern": "\\bgit\\s+push\\b.*(--force|\\s-f\\b)",
+        "reason": "git push --force bloqueado."
+      },
+      {
+        "pattern": "\\b(curl|wget)\\b[^|]*\\|\\s*(ba|z)?sh\\b",
+        "reason": "Executar script baixado da internet bloqueado."
+      },
+      {
+        "pattern": "\\brm\\s+-[a-z]*r[a-z]*\\s+(/|~|\\$HOME)(\\s|$)",
+        "reason": "Remoção recursiva fora do projeto bloqueada."
+      },
+      {
+        "pattern": "\\b(gcloud\\s+storage\\s+(rm|buckets\\s+delete)|gsutil\\s+(-m\\s+)?(rm|rb))\\b",
+        "reason": "Evidências no Cloud Storage não são apagadas pela IA."
+      },
+      {
+        "pattern": "\\bbq\\s+rm\\b|\\b(DELETE|DROP|TRUNCATE)\\b[^;]*\\bauditoria_ia\\b",
+        "reason": "A trilha de auditoria no BigQuery não é apagada pela IA."
+      }
+    ],
+    "blocked_tools": [
+      {
+        "pattern": "delete_object|delete_bucket",
+        "reason": "Evidências no Cloud Storage não são apagadas pela IA."
+      }
+    ]
+  },
+  "rules": {
+    "install": [
+      "auditoria",
+      "testes",
+      "padroes"
+    ]
+  },
+  "telemetry": {
+    "enabled": true,
+    "participant": null,
+    "local": {
+      "project": null,
+      "dataset": "auditoria_ia",
+      "table": "eventos"
+    },
+    "central": {
+      "url": null,
+      "token": null
+    }
+  }
+}
