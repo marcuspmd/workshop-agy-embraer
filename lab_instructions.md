@@ -25,20 +25,20 @@ Você instala no `agy` a skill **`my-task`**, que faz a IA **planejar e codifica
 
 ### Modelo Mental: do desenvolvimento tradicional ao mundo de agentes
 
-| Conceito no Laboratório | Equivalente no Desenvolvimento Tradicional | Papel no Laboratório |
-| :--- | :--- | :--- |
-| **Antigravity CLI (`agy`)** | Par programador no terminal | Gera código, roda comandos e orquestra o trabalho no Cloud Shell. |
-| **Skill `my-task`** | Playbook do time | O fluxo governado para planejar e codificar qualquer task, com trilha de auditoria. |
-| **Regras de workspace (rules)** | Guia de estilo e padrões de arquitetura | Padrões da `my-task` e as regras de cada projeto, que o `agy` segue sempre. |
-| **Hooks** | Git hooks / middleware de auditoria | Registram cada ação da IA, bloqueiam o que não pode e rodam os testes no encerramento. |
-| **Trilha e painel** | Log de auditoria e observabilidade | Cada evento vai para o BigQuery do seu projeto e para o painel da turma. |
-| **Google ADK** | Framework backend (FastAPI, Express) | Estrutura o agente Painel em Python. |
-| **ADK Skills (`SKILL.md`)** | Manuais de negócio e de compliance | O que o Painel sabe fazer: mostrar a atividade do time e fazer a diligência de uma task. |
-| **MCP do BigQuery** | Conector padronizado de APIs | Dá ao Painel acesso somente leitura à trilha no BigQuery. |
-| **`agents-cli`** | Ferramenta de build e deploy | Cria o projeto do agente e publica no Agent Runtime. |
-| **ADK Web** | Servidor local com interface (Swagger) | Testa o agente no navegador antes do deploy. |
-| **Agent Runtime** | Plataforma serverless gerenciada | Hospeda o agente com segurança e escala. |
-| **Gemini Enterprise** | Portal e licenciamento corporativo | Onde o Antigravity é habilitado e onde o Painel chega às pessoas. |
+| Conceito no Laboratório         | Equivalente no Desenvolvimento Tradicional | Papel no Laboratório                                                                     |
+| :------------------------------ | :----------------------------------------- | :--------------------------------------------------------------------------------------- |
+| **Antigravity CLI (`agy`)**     | Par programador no terminal                | Gera código, roda comandos e orquestra o trabalho no Cloud Shell.                        |
+| **Skill `my-task`**             | Playbook do time                           | O fluxo governado para planejar e codificar qualquer task, com trilha de auditoria.      |
+| **Regras de workspace (rules)** | Guia de estilo e padrões de arquitetura    | Padrões da `my-task` e as regras de cada projeto, que o `agy` segue sempre.              |
+| **Hooks**                       | Git hooks / middleware de auditoria        | Registram cada ação da IA, bloqueiam o que não pode e rodam os testes no encerramento.   |
+| **Trilha e painel**             | Log de auditoria e observabilidade         | Cada evento vai para o BigQuery do seu projeto e para o painel da turma.                 |
+| **Google ADK**                  | Framework backend (FastAPI, Express)       | Estrutura o agente Painel em Python.                                                     |
+| **ADK Skills (`SKILL.md`)**     | Manuais de negócio e de compliance         | O que o Painel sabe fazer: mostrar a atividade do time e fazer a diligência de uma task. |
+| **MCP do BigQuery**             | Conector padronizado de APIs               | Dá ao Painel acesso somente leitura à trilha no BigQuery.                                |
+| **`agents-cli`**                | Ferramenta de build e deploy               | Cria o projeto do agente e publica no Agent Runtime.                                     |
+| **ADK Web**                     | Servidor local com interface (Swagger)     | Testa o agente no navegador antes do deploy.                                             |
+| **Agent Runtime**               | Plataforma serverless gerenciada           | Hospeda o agente com segurança e escala.                                                 |
+| **Gemini Enterprise**           | Portal e licenciamento corporativo         | Onde o Antigravity é habilitado e onde o Painel chega às pessoas.                        |
 
 ### Objetivos do Laboratório
 
@@ -90,16 +90,17 @@ Para acessar os recursos desta sessão, use os valores abaixo:
 
 1.  No painel lateral esquerdo do laboratório, clique com o botão direito em **Abrir console do Google Cloud** e selecione **Abrir link em janela anônima**.
 
-2.  Se aparecer a caixa **Escolher uma conta** (*Choose an account*), clique em **Usar outra conta** (*Use another account*).
+2.  Se aparecer a caixa **Escolher uma conta** (_Choose an account_), clique em **Usar outra conta** (_Use another account_).
 
-3.  Na tela de login do Google, cole o **Nome de usuário** temporário (<ql-variable key="user_0.username"></ql-variable>) e clique em **Avançar** (*Next*).
+3.  Na tela de login do Google, cole o **Nome de usuário** temporário (<ql-variable key="user_0.username"></ql-variable>) e clique em **Avançar** (_Next_).
 
-4.  Cole a **Senha** temporária do painel e clique em **Avançar** (*Next*).
+4.  Cole a **Senha** temporária do painel e clique em **Avançar** (_Next_).
 
 5.  Conclua as telas de boas-vindas da conta temporária:
-   - Na tela **Bem-vindo à sua nova conta**, clique em **Entendi** ou **Aceitar**;
-   - Na tela **Proteja sua conta**, **NÃO** adicione telefone de recuperação nem 2FA: clique em **Atualizar mais tarde** ou **Agora não**;
-   - Na tela **Termos de Serviço** do Console, marque a caixa de concordância e clique em **Concordar e continuar**, sem se inscrever em períodos de teste gratuito.
+
+- Na tela **Bem-vindo à sua nova conta**, clique em **Entendi** ou **Aceitar**;
+- Na tela **Proteja sua conta**, **NÃO** adicione telefone de recuperação nem 2FA: clique em **Atualizar mais tarde** ou **Agora não**;
+- Na tela **Termos de Serviço** do Console, marque a caixa de concordância e clique em **Concordar e continuar**, sem se inscrever em períodos de teste gratuito.
 
 Depois de alguns instantes, o Console do Google Cloud abre nesta aba anônima.
 
@@ -113,7 +114,7 @@ O time de engenharia de software de um fabricante de aeronaves começou a usar I
 
 Você vai mostrar o caminho: a IA trabalha com as **regras escritas do time**, cada ação vira **evidência**, e um **painel** mostra, ao vivo, como cada pessoa está usando a IA e se o processo foi seguido. Para isso, você codifica uma API no projeto `frota-api` e constrói o agente Painel, que a liderança e a qualidade vão usar no Gemini Enterprise.
 
-> 📺 **Painel da turma:** o facilitador vai deixar o painel central aberto no telão. A partir da Tarefa 2, cada ação da IA no seu Cloud Shell aparece lá em poucos segundos.
+> 📺 **Painel da turma:** o apresentador vai deixar o painel central aberto no telão. A partir da Tarefa 2, cada ação da IA no seu Cloud Shell aparece lá em poucos segundos.
 
 ---
 
@@ -122,11 +123,12 @@ Você vai mostrar o caminho: a IA trabalha com as **regras escritas do time**, c
 Nesta tarefa, você conhece as ofertas do Antigravity, prepara o Cloud Shell e instala e autentica o `agy` e o `agents-cli`.
 
 > 💡 **Guia Visual de Ambientes:**  
-> Cada passo começa com um distintivo que diz onde ele acontece:  
-> - 💻 **Terminal Cloud Shell (`$`):** comandos do shell Linux no Cloud Shell.  
-> - 🤖 **Prompt do Antigravity CLI (`agy >`):** comandos e pedidos dentro da sessão interativa do `agy`.  
-> - 📝 **Editor do Cloud Shell:** arquivos abertos no editor.  
-> - 🌐 **Navegador / ADK Web:** ações no navegador.  
+> Cada passo começa com um distintivo que diz onde ele acontece:
+>
+> - 💻 **Terminal Cloud Shell (`$`):** comandos do shell Linux no Cloud Shell.
+> - 🤖 **Prompt do Antigravity CLI (`agy >`):** comandos e pedidos dentro da sessão interativa do `agy`.
+> - 📝 **Editor do Cloud Shell:** arquivos abertos no editor.
+> - 🌐 **Navegador / ADK Web:** ações no navegador.
 > - ☁️ **Console Google Cloud:** ações na interface do Console.
 
 ### Conhecer as ofertas do Antigravity no Google Cloud
@@ -137,9 +139,9 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
 
 1.  ☁️ **Console Google Cloud:** No canto superior direito do Console, clique em **Ativar o Cloud Shell**.
 
-2.  ☁️ **Console Google Cloud:** Na janela informativa do Cloud Shell, clique em **Continuar** (*Continue*).
+2.  ☁️ **Console Google Cloud:** Na janela informativa do Cloud Shell, clique em **Continuar** (_Continue_).
 
-3.  💻 **Terminal Cloud Shell (`$`):** Inicialize as variáveis de ambiente do projeto e da região, gravando-as no `~/.bashrc` para que novas abas do terminal herdem os valores. Quando aparecer a janela **Autorizar o Cloud Shell a fazer chamadas de API do GCP**, clique em **Autorizar** (*Authorize*):
+3.  💻 **Terminal Cloud Shell (`$`):** Inicialize as variáveis de ambiente do projeto e da região, gravando-as no `~/.bashrc` para que novas abas do terminal herdem os valores. Quando aparecer a janela **Autorizar o Cloud Shell a fazer chamadas de API do GCP**, clique em **Autorizar** (_Authorize_):
 
     ```bash
     export PROJECT_ID=$DEVSHELL_PROJECT_ID
@@ -169,10 +171,11 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
 
 ### Instalar as ferramentas
 
-> ℹ️ **Atalhos no terminal do Cloud Shell:**  
-> - `CTRL+C` interrompe o programa em execução. Para abrir links exibidos no terminal, use **`CTRL+Clique`** (ou **`CMD+Clique`** no Mac).  
-> - Para colar no terminal, use **`CTRL+SHIFT+V`** (Windows/Linux) ou **`CMD+V`** (Mac).  
-> - Se um instalador disser que a ferramenta já está instalada (*already installed*), siga normalmente.
+> ℹ️ **Atalhos no terminal do Cloud Shell:**
+>
+> - `CTRL+C` interrompe o programa em execução. Para abrir links exibidos no terminal, use **`CTRL+Clique`** (ou **`CMD+Clique`** no Mac).
+> - Para colar no terminal, use **`CTRL+SHIFT+V`** (Windows/Linux) ou **`CMD+V`** (Mac).
+> - Se um instalador disser que a ferramenta já está instalada (_already installed_), siga normalmente.
 
 1.  💻 **Terminal Cloud Shell (`$`):** Instale o gerenciador de pacotes `uv`:
 
@@ -204,15 +207,16 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
     ```
 
 2.  🤖 **Setup Interativo do Antigravity CLI (`agy`):** Siga as etapas exibidas no terminal:
-   - **Passo 1:** selecione **`2. Use a Google Cloud project`**;
-   - **Passo 2:** selecione **`1. Continue with Google Cloud`**;
-   - **Passo 3:** abra o link de autorização (`CTRL+Clique`) numa nova aba da Janela Anônima, escolha a conta de estudante <ql-variable key="user_0.username"></ql-variable>, conceda o consentimento e cole o código de volta no terminal;
-   - **Passo 4:** em **Select billing model**, desça até **`2. Pay As You Go`** e pressione `ENTER` (não confirme a opção `1. Subscriptions`, que vem selecionada);
-   - **Passo 5:** em **Provide Google Cloud project**, cole o ID do projeto (<ql-variable key="project_0.project_id"></ql-variable>) e pressione `ENTER`;
-   - **Passo 6:** em **Choose region**, selecione **`global`** e pressione `ENTER`;
-   - **Passo 7:** escolha o tema de cores e, em **Migration options**, deixe **`Import extensions from Gemini CLI`** desmarcado; vá até **`Next`** e pressione `ENTER`;
-   - **Passo 8:** em **Terms of Service & Data Use**, vá até **`Done`** e pressione `ENTER`;
-   - **Passo 9:** em **Do you trust the contents of this project?**, selecione **`Yes, I trust this folder`** e pressione `ENTER`.
+
+- **Passo 1:** selecione **`2. Use a Google Cloud project`**;
+- **Passo 2:** selecione **`1. Continue with Google Cloud`**;
+- **Passo 3:** abra o link de autorização (`CTRL+Clique`) numa nova aba da Janela Anônima, escolha a conta de estudante <ql-variable key="user_0.username"></ql-variable>, conceda o consentimento e cole o código de volta no terminal;
+- **Passo 4:** em **Select billing model**, desça até **`2. Pay As You Go`** e pressione `ENTER` (não confirme a opção `1. Subscriptions`, que vem selecionada);
+- **Passo 5:** em **Provide Google Cloud project**, cole o ID do projeto (<ql-variable key="project_0.project_id"></ql-variable>) e pressione `ENTER`;
+- **Passo 6:** em **Choose region**, selecione **`global`** e pressione `ENTER`;
+- **Passo 7:** escolha o tema de cores e, em **Migration options**, deixe **`Import extensions from Gemini CLI`** desmarcado; vá até **`Next`** e pressione `ENTER`;
+- **Passo 8:** em **Terms of Service & Data Use**, vá até **`Done`** e pressione `ENTER`;
+- **Passo 9:** em **Do you trust the contents of this project?**, selecione **`Yes, I trust this folder`** e pressione `ENTER`.
 
 > ⚠️ **Problemas de autenticação:**  
 > Se aparecerem erros como `Permission 'aiplatform.endpoints.predict' denied` ou `Agent terminated due to error`, saia com `/exit`, rode `agy auth logout` no terminal e inicie o `agy` de novo, entrando com a conta <ql-variable key="user_0.username"></ql-variable>.
@@ -239,16 +243,16 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
 
 > 💡 **Comandos úteis do Antigravity CLI (`agy`):**
 >
-> | Comando / Atalho | Ação |
-> | :--- | :--- |
-> | `/skills` | Lista as skills carregadas |
-> | `/hooks` | Mostra os hooks carregados |
-> | `/mcp` | Mostra os servidores MCP e o status de cada um |
-> | `/agents` | Acompanha os subagentes (`k` para parar um) |
-> | `/goal` | Executa um objetivo até o fim |
-> | `/grill-me` | Entrevista você antes de qualquer trabalho |
-> | `/model` / `/config` | Troca o modelo / abre as configurações |
-> | `/exit` | Sai do `agy` e volta para o terminal |
+> | Comando / Atalho     | Ação                                           |
+> | :------------------- | :--------------------------------------------- |
+> | `/skills`            | Lista as skills carregadas                     |
+> | `/hooks`             | Mostra os hooks carregados                     |
+> | `/mcp`               | Mostra os servidores MCP e o status de cada um |
+> | `/agents`            | Acompanha os subagentes (`k` para parar um)    |
+> | `/goal`              | Executa um objetivo até o fim                  |
+> | `/grill-me`          | Entrevista você antes de qualquer trabalho     |
+> | `/model` / `/config` | Troca o modelo / abre as configurações         |
+> | `/exit`              | Sai do `agy` e volta para o terminal           |
 
 > ⚠️ Se em algum momento aparecer o erro `Organization Policy constraint constraints/vertexai.allowedModels violated`, rode `/model` e selecione **`Gemini 3.8 Flash`** de novo.
 
@@ -278,16 +282,18 @@ Nesta tarefa, você instala a skill `my-task`, que cria as regras de workspace, 
     ```
 
 2.  🤖 **Prompt do Antigravity CLI (`agy >`):** A skill olha o workspace e pergunta as diretrizes do time, uma de cada vez. Nas perguntas de opção, escolha com as setas; nas de texto, digite a resposta. Respostas sugeridas:
-   - idioma e linguagem: **pt-BR e Python**;
-   - arquitetura: **seguir-o-projeto** (a `frota-api` já usa `routers` → `services` → `repositories`);
-   - observações de arquitetura: **SQL só em repositories**;
-   - tipos de teste: **unitário e integração**;
-   - quality gate, comando de testes: **`./scripts/testes.sh`** (roda os testes de cada projeto do repositório);
-   - cobertura mínima: **nenhuma** (o projeto ainda não tem `pytest-cov`; veja a dica abaixo);
-   - subagentes: **ligados, com até 2 em paralelo**;
-   - dependências novas: **permitidas, justificadas no README**;
-   - convenções do time: **erros no formato padrão de `app/erros.py`**;
-   - regra do time: **o README explica como rodar e testar o projeto**.
+
+- idioma e linguagem: **pt-BR e Python**;
+- arquitetura: **seguir-o-projeto** (a `frota-api` já usa `routers` → `services` → `repositories`);
+- observações de arquitetura: **SQL só em repositories**;
+- tipos de teste: **unitário e integração**;
+- quality gate, comando de testes: **`./scripts/testes.sh`** (roda os testes de cada projeto do repositório);
+- cobertura mínima: **nenhuma** (o projeto ainda não tem `pytest-cov`; veja a dica abaixo);
+- subagentes: **ligados, com até 2 em paralelo**;
+- dependências novas: **permitidas, justificadas no README**;
+- convenções do time: **erros no formato padrão de `app/erros.py`**;
+- regra do time: **o README explica como rodar e testar o projeto**.
+
 
     > 💡 Para exigir cobertura, responda **80%** e o comando `cd frota-api && uv run --with pytest-cov pytest -q --cov=app --cov-fail-under=80`. O hook não deixa a task encerrar abaixo do mínimo.
 
@@ -304,7 +310,7 @@ Nesta tarefa, você instala a skill `my-task`, que cria as regras de workspace, 
     ls .agents/rules .agents/agents
     ```
 
-5.  💻 **Terminal Cloud Shell (`$`):** Ligue o envio da trilha. Troque `Seu Nome` pelo nome que vai aparecer no painel, e `URL` e `TOKEN` pelos valores que o facilitador mostra no telão. Só uma pessoa liga a telemetria, no terminal: a IA é bloqueada de rodar este script.
+5.  💻 **Terminal Cloud Shell (`$`):** Ligue o envio da trilha. Troque `Seu Nome` pelo nome que vai aparecer no painel, e `URL` e `TOKEN` pelos valores que o apresentador mostra no telão. Só uma pessoa liga a telemetria, no terminal: a IA é bloqueada de rodar este script.
 
     ```bash
     node .agents/skills/my-task/scripts/conectar-painel.mjs --nome "Seu Nome" --url URL --token TOKEN
@@ -597,7 +603,7 @@ Nesta tarefa, você dá ao agente publicado as permissões de leitura de que ele
     Painel de Engenharia
     ```
 
-4.  ☁️ **Console Google Cloud (Gemini Enterprise):** No menu lateral do app, clique em **Agentes** (*Agents*) e depois em **Adicionar Agente** (*Add Agent*). Na tela **Choose an agent type**, localize o card **Custom agent via Agent Runtime** e clique em **Add**.
+4.  ☁️ **Console Google Cloud (Gemini Enterprise):** No menu lateral do app, clique em **Agentes** (_Agents_) e depois em **Adicionar Agente** (_Add Agent_). Na tela **Choose an agent type**, localize o card **Custom agent via Agent Runtime** e clique em **Add**.
 
 5.  ☁️ **Console Google Cloud (Gemini Enterprise):** Na etapa **1. Authorizations**, clique em **Skip**. Na etapa **2. Configuration**, preencha o campo **Agent name**:
 
@@ -667,7 +673,7 @@ Nesta tarefa, você confere que a trilha não foi alterada, lê o relatório, re
     Faça a diligência da minha task de horas de voo da frota-api.
     ```
 
-6.  📺 **Telão:** O facilitador abre o painel central da turma, com o mesmo agente apontado para o projeto central. Acompanhe quem já revisou, quem teve bloqueios e como cada um usou a IA.
+6.  📺 **Telão:** O apresentador abre o painel central da turma, com o mesmo agente apontado para o projeto central. Acompanhe quem já revisou, quem teve bloqueios e como cada um usou a IA.
 
 7.  💻 **Terminal Cloud Shell (`$`):** Confira o status final e rode o verificador completo:
 
@@ -684,14 +690,16 @@ Nesta tarefa, você confere que a trilha não foi alterada, lê o relatório, re
 
 ## Encerrar o Laboratório
 
-1.  Quando concluir todas as atividades, clique no botão **Terminar o laboratório** (*End Lab*) no painel superior esquerdo.
-2.  Na janela de confirmação, clique em **Enviar** (*Submit*). Todos os recursos da sua sessão temporária são excluídos com segurança.
+1.  Quando concluir todas as atividades, clique no botão **Terminar o laboratório** (_End Lab_) no painel superior esquerdo.
+2.  Na janela de confirmação, clique em **Enviar** (_Submit_). Todos os recursos da sua sessão temporária são excluídos com segurança.
 3.  Avalie a sua experiência com o laboratório:
-   - 1 estrela = Muito insatisfeito
-   - 2 estrelas = Insatisfeito
-   - 3 estrelas = Neutro
-   - 4 estrelas = Satisfeito
-   - 5 estrelas = Muito satisfeito
+
+- 1 estrela = Muito insatisfeito
+- 2 estrelas = Insatisfeito
+- 3 estrelas = Neutro
+- 4 estrelas = Satisfeito
+- 5 estrelas = Muito satisfeito
+
 4.  Se quiser, deixe um comentário com o seu feedback.
 
 ---

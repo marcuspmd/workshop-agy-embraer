@@ -1,4 +1,4 @@
-# Roteiro do facilitador
+# Roteiro do apresentador
 
 Material interno: não vai para o Qwiklabs. O roteiro do aluno é o `lab_instructions.md`.
 

@@ -1,4 +1,4 @@
-# Painel central da turma (facilitador)
+# Painel central da turma (apresentador)
 
 O painel central recebe os eventos da `my-task` de todos os participantes e mostra a turma inteira no telão.
 

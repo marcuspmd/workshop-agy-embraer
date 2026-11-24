@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prepara o projeto CENTRAL do facilitador: dataset do painel, hub no Cloud Run e o token.
+# Prepara o projeto CENTRAL do apresentador: dataset do painel, hub no Cloud Run e o token.
 # Uso: PROJECT_ID=<projeto-central> ./painel-central/deploy.sh   (rode da raiz do repositório)
 set -euo pipefail
 

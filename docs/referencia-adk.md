@@ -23,7 +23,7 @@ As pastas das skills são cópias de `skills/` da raiz do repositório para `pai
 
 ## 2. Ferramenta tabela_do_painel
 
-Diz ao agente qual tabela ler, a partir do `.env`. Assim o mesmo código serve para o seu projeto e para o projeto central do facilitador. Nunca levanta exceção.
+Diz ao agente qual tabela ler, a partir do `.env`. Assim o mesmo código serve para o seu projeto e para o projeto central do apresentador. Nunca levanta exceção.
 
 ```python
 def tabela_do_painel() -> dict:
@@ -100,4 +100,4 @@ PAINEL_PROJECT=<projeto onde está a tabela auditoria_ia.eventos>
 PAINEL_DATASET=auditoria_ia
 ```
 
-No seu projeto, `PAINEL_PROJECT` é o seu próprio projeto. No projeto central, o facilitador usa o projeto central e o painel mostra a turma inteira.
+No seu projeto, `PAINEL_PROJECT` é o seu próprio projeto. No projeto central, o apresentador usa o projeto central e o painel mostra a turma inteira.

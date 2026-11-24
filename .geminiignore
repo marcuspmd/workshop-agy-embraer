@@ -1,6 +1,6 @@
 # Infraestrutura e material de autoria do lab: fora do contexto do agy.
 terraform/
 qwiklabs/
-docs/facilitador.md
+docs/apresentador.md
 lab_instructions.md
 *.zip

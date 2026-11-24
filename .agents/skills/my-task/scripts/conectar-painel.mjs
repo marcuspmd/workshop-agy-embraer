@@ -13,8 +13,8 @@ import { outboxPath, toRow, wakeShipper } from './telemetry.mjs';
 const HELP = `Uso: node .agents/skills/my-task/scripts/conectar-painel.mjs --nome "Seu Nome" [opções]
 
   --nome "<nome>"      como você aparece no painel (obrigatório)
-  --url <url>          URL do painel central do time (o facilitador informa)
-  --token <token>      token do painel central (o facilitador informa)
+  --url <url>          URL do painel central do time (o apresentador informa)
+  --token <token>      token do painel central (o apresentador informa)
   --projeto <id>       projeto do BigQuery local (padrão: gcloud config get-value project)
   --sem-central        envia só para o BigQuery do próprio projeto
   --help               esta ajuda

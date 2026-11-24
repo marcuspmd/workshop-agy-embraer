@@ -14,17 +14,59 @@ Laboratório hands-on de 90 minutos para o **[Embraer] Antigravity Labs — Goog
 
 ## Como as peças se encaixam
 
-```text
-Cloud Shell de cada participante                        Projeto central do facilitador
-┌──────────────────────────────────────┐                ┌──────────────────────────────────┐
-│ agy + skill my-task                   │   eventos      │ painel-hub (Cloud Run)            │
-│  planeja e codifica (frota-api, ...)  │ ─────────────▶ │  → BigQuery auditoria_ia.eventos  │
-│  hooks → .audit/log.jsonl (hashes)    │                │  → Cloud Logging (telão ao vivo)  │
-│        → BigQuery do próprio projeto  │                │ Painel my-task no Gemini Ent.     │
-│ Painel my-task (ADK) no Agent Runtime │                │  (o mesmo agente, a turma inteira)│
-│  skills painel + diligencia           │                └──────────────────────────────────┘
-│  MCP do BigQuery (só leitura)         │
-└──────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph aluno["Cloud Shell de cada participante"]
+        direction TB
+        agy["agy + skill my-task<br/>planeja e codifica<br/>(frota-api, painel-agent)"]
+        rules[".agents/rules<br/>my-task-* e projeto-*"]
+        hooks["hooks<br/>política · quality gate · Stop"]
+        task["&lt;projeto&gt;/.my-task/&lt;task&gt;/<br/>REQUEST · PLAN · DONE<br/>STATE · LOG · REPORT"]
+        log[(".audit/log.jsonl<br/>cadeia de hashes")]
+        bqLocal[("BigQuery do projeto<br/>auditoria_ia.eventos")]
+        painel["Agente Painel (ADK)<br/>no Agent Runtime<br/>skills painel + diligencia"]
+        mcp["MCP do BigQuery<br/>somente leitura"]
+
+        rules --> agy
+        agy --> task
+        agy <--> hooks
+        hooks --> log
+        log --> bqLocal
+        painel --> mcp --> bqLocal
+    end
+
+    subgraph central["Projeto central do apresentador"]
+        direction TB
+        hub["painel-hub<br/>(Cloud Run)"]
+        bqCentral[("BigQuery<br/>auditoria_ia.eventos")]
+        logging["Cloud Logging<br/>telão ao vivo"]
+        gemini["Painel my-task no<br/>Gemini Enterprise<br/>(a turma inteira)"]
+
+        hub --> bqCentral
+        hub --> logging
+        gemini --> bqCentral
+    end
+
+    log -- eventos --> hub
+```
+
+### O fluxo de uma task na `my-task`
+
+```mermaid
+flowchart TD
+    init["/my-task init<br/>diretrizes do time: arquitetura, tipos de teste,<br/>cobertura mínima, convenções"] --> cfg[(".ai/my-task.json<br/>+ rule my-task-padroes")]
+    cfg --> pedido["/my-task &lt;pedido&gt;"]
+    pedido --> entrevista["Entrevista grill-me<br/>uma pergunta por vez, até grill.max_questions (padrão 10)"]
+    entrevista --> pasta["Pasta da task<br/>PLAN.md com REQ-xx · DONE.md com critérios"]
+    pasta --> aprova{"Usuário aprova o plano?"}
+    aprova -- ajustar --> pasta
+    aprova -- sim --> exec["STATE.md: status em execução<br/>execução automática (modo goal)"]
+    exec --> sub["Subagentes em paralelo<br/>test-writer e implementer"]
+    sub --> verif["my-task-verifier<br/>evidência própria por REQ e critério"]
+    verif --> stop{"Hook Stop: testes, REQ com teste,<br/>cobertura e verificador ok?"}
+    stop -- não, continua --> sub
+    stop -- sim --> relatorio["REPORT.md + AUDIT.md<br/>status concluído"]
+    relatorio --> revisao["Revisão humana<br/>audit-review.mjs, no terminal"]
 ```
 
 - **Skill `my-task` (no `agy`):** genérica, planeja e codifica qualquer task em qualquer repositório, com rules, hooks, subagentes, quality gate, verificador e revisão humana. Cada ação vira evento na trilha local (cadeia de hashes), no BigQuery do projeto e no painel central.
@@ -44,8 +86,8 @@ workshop-agy-embraer/
 │   └── diligencia/                      # ADK Skill: parecer sobre se uma task seguiu o processo
 ├── docs/
 │   ├── referencia-adk.md                # padrões de código ADK testados (skills, tabela_do_painel, MCP do BigQuery)
-│   └── facilitador.md                   # tempo, checklist do evento e problemas comuns
-├── painel-central/                      # projeto central do facilitador: hub no Cloud Run, schema e deploy.sh
+│   └── apresentador.md                  # tempo, checklist do evento e problemas comuns
+├── painel-central/                      # projeto central do apresentador: hub no Cloud Run, schema e deploy.sh
 ├── scripts/check_progress.sh            # verificador de progresso do aluno (tarefas 1 a 7)
 ├── scripts/testes.sh                    # testes de todos os projetos (usado pelo quality gate)
 ├── terraform/                           # setup do projeto do aluno: APIs e dataset auditoria_ia
@@ -65,7 +107,7 @@ workshop-agy-embraer/
    - aba **Instructions**: cole o `lab_instructions.md`;
    - aba **Lab Resources**: no `project_0`, envie o `qwiklabs/Archive.zip` e clique em **Update Lab Resource**;
    - em **Student Visible Outputs**, marque `project_0.console_url`, `project_0.project_id`, `user_0.username`, `user_0.password` e `project_0.default_region`.
-4. Prepare o painel central (`painel-central/README.md`) e teste o lab de ponta a ponta seguindo `docs/facilitador.md`.
+4. Prepare o painel central (`painel-central/README.md`) e teste o lab de ponta a ponta seguindo `docs/apresentador.md`.
 
 ## Limites
 
