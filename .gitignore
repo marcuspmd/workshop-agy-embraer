@@ -5,7 +5,7 @@
 .agents/rules/my-task-*
 .agents/agents/my-task-*
 .agents/mcp_config.json
-AUDIT.md
+/AUDIT.md
 .my-task/
 painel-agent/.env
 painel-agent/.venv/
