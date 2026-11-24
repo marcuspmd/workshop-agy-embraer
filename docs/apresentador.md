@@ -64,4 +64,4 @@ São duas execuções longas em modo goal (Tarefas 3 e 4), que começam sozinhas
 
 ## Verificador de progresso
 
-`scripts/check_progress.sh <1..7|all>` confere o que é verificável em cada tarefa. A publicação no Gemini Enterprise (Tarefa 6) é conferida no Console.
+`scripts/check_progress.sh <1..7|all>` confere o que é verificável no Cloud Shell em cada tarefa; com o `agy` aberto, o aluno roda com `!./scripts/check_progress.sh N`. O **Verificar meu progresso** do Qwiklabs (`qwiklabs/activity-tracking.md`) confere o que fica no projeto GCP: a trilha no BigQuery (Tarefas 2, 3, 4 e 7), o agente no Agent Runtime (Tarefa 5) e as permissões (Tarefa 6). A publicação no Gemini Enterprise (Tarefa 6) é conferida no Console.

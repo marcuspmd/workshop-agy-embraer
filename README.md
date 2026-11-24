@@ -91,7 +91,9 @@ workshop-agy-embraer/
 ├── scripts/check_progress.sh            # verificador de progresso do aluno (tarefas 1 a 7)
 ├── scripts/testes.sh                    # testes de todos os projetos (usado pelo quality gate)
 ├── terraform/                           # setup do projeto do aluno: APIs e dataset auditoria_ia
-└── qwiklabs/Archive.zip                 # pacote do terraform para o project_0
+└── qwiklabs/
+    ├── Archive.zip                      # pacote do terraform para o project_0
+    └── activity-tracking.md             # passos do "Verificar meu progresso" (Ruby, para colar no editor do lab)
 ```
 
 ## Publicar no Qwiklabs
@@ -106,7 +108,8 @@ workshop-agy-embraer/
 3. No editor do lab no Qwiklabs:
    - aba **Instructions**: cole o `lab_instructions.md`;
    - aba **Lab Resources**: no `project_0`, envie o `qwiklabs/Archive.zip` e clique em **Update Lab Resource**;
-   - em **Student Visible Outputs**, marque `project_0.console_url`, `project_0.project_id`, `user_0.username`, `user_0.password` e `project_0.default_region`.
+   - em **Student Visible Outputs**, marque `project_0.console_url`, `project_0.project_id`, `user_0.username`, `user_0.password` e `project_0.default_region`;
+   - em **Activity Tracking**, crie os 6 passos de `qwiklabs/activity-tracking.md` (Tarefas 2 a 7) e teste cada um num lab de teste.
 4. Prepare o painel central (`painel-central/README.md`) e teste o lab de ponta a ponta seguindo `docs/apresentador.md`.
 
 ## Limites

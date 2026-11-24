@@ -22,13 +22,22 @@ export function destinations(config) {
 }
 
 function planTitle(root) {
-  // Título do plano mais recente (raiz ou subpasta de primeiro nível), para saber de qual task é o evento.
-  const candidates = [path.join(root, 'PLAN.md')];
+  // Título do plano da task mais recente (<projeto>/.my-task/<task>/PLAN.md), para saber de qual task é o evento.
+  const taskDir = loadConfig(root).config.tasks?.dir || '.my-task';
+  const candidates = [];
+  const scan = (base) => {
+    try {
+      for (const t of fs.readdirSync(base, { withFileTypes: true })) {
+        if (t.isDirectory()) candidates.push(path.join(base, t.name, 'PLAN.md'));
+      }
+    } catch {
+      // projeto sem tasks
+    }
+  };
+  scan(path.join(root, taskDir));
   try {
     for (const d of fs.readdirSync(root, { withFileTypes: true })) {
-      if (d.isDirectory() && !d.name.startsWith('.') && !['node_modules', '.venv'].includes(d.name)) {
-        candidates.push(path.join(root, d.name, 'PLAN.md'));
-      }
+      if (d.isDirectory() && !d.name.startsWith('.') && !['node_modules', '.venv'].includes(d.name)) scan(path.join(root, d.name, taskDir));
     }
   } catch {
     return null;
@@ -39,8 +48,8 @@ function planTitle(root) {
     .sort((a, b) => b.m - a.m)[0];
   if (!found) return null;
   const first = fs.readFileSync(found.f, 'utf8').split('\n').find((l) => l.startsWith('# '));
-  const dir = path.relative(root, path.dirname(found.f)) || '.';
-  return `${dir}: ${(first ?? '# (sem título)').replace(/^#\s*(Plano\s*[—-]\s*)?/, '').trim()}`.slice(0, 200);
+  const project = path.relative(root, path.dirname(path.dirname(path.dirname(found.f)))) || '.';
+  return `${project}: ${(first ?? '# (sem título)').replace(/^#\s*(Plano\s*[—-]\s*)?/, '').trim()}`.slice(0, 200);
 }
 
 function short(value, max = 500) {

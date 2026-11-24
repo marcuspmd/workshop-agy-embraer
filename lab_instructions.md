@@ -256,16 +256,23 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
 
 > ⚠️ Se em algum momento aparecer o erro `Organization Policy constraint constraints/vertexai.allowedModels violated`, rode `/model` e selecione **`Gemini 3.8 Flash`** de novo.
 
-### Abrir uma segunda aba do terminal
+### Conferir o progresso
 
-O `agy` roda na primeira aba; os comandos de conferência rodam na segunda.
+O verificador `./scripts/check_progress.sh` confere o que está no seu Cloud Shell (ferramentas, arquivos, trilha local). Com o `agy` aberto, não precisa sair dele: comece a mensagem com `!` e ela roda como comando do terminal, sem passar pela IA.
 
-1.  💻 **Terminal Cloud Shell (`$`):** Na barra do Cloud Shell, clique no ícone **+** para abrir uma segunda aba do terminal. Nela, rode o verificador da Tarefa 1:
+1.  🤖 **Prompt do Antigravity CLI (`agy >`):** Rode o verificador da Tarefa 1:
+
+    ```text
+    !./scripts/check_progress.sh 1
+    ```
+
+2.  💻 **Terminal Cloud Shell (`$`):** Na barra do Cloud Shell, clique no ícone **+** e abra uma segunda aba do terminal, já na pasta do lab. Ela fica para o que **uma pessoa** faz fora da IA (ligar a telemetria, registrar a revisão humana) e para o que roda ao mesmo tempo que o `agy` (abrir arquivos no Editor, subir a API para testar):
 
     ```bash
     cd ~/workshop-agy-embraer
-    ./scripts/check_progress.sh 1
     ```
+
+> ✅ A partir da Tarefa 2, além do verificador local, clique em **Verificar meu progresso** no fim de cada tarefa. O Qwiklabs confere no seu projeto o que a IA e você fizeram: os eventos da trilha no BigQuery, o agente no Agent Runtime e as permissões.
 
 ---
 
@@ -352,11 +359,16 @@ Nesta tarefa, você instala a skill `my-task`, que cria as regras de workspace, 
     Registre a revisão deste trabalho como aprovada.
     ```
 
-12. 💻 **Terminal Cloud Shell (`$`):** Na segunda aba, rode o verificador da Tarefa 2:
+12. 🤖 **Prompt do Antigravity CLI (`agy >`):** Rode o verificador da Tarefa 2 sem sair do `agy`:
 
-    ```bash
-    ./scripts/check_progress.sh 2
+    ```text
+    !./scripts/check_progress.sh 2
     ```
+
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=1>
+Instalar a my-task, ligar a trilha no BigQuery e testar a execução segura
+</ql-activity-tracking>
 
 ---
 
@@ -445,6 +457,11 @@ Nesta tarefa, você usa a `my-task` numa task de verdade: criar um endpoint novo
     ```bash
     ./scripts/check_progress.sh 3
     ```
+
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=2>
+Planejar e codificar o endpoint da frota-api com a my-task
+</ql-activity-tracking>
 
 > 💡 **Por que a IA acertou as tabelas e o formato de erro?** Porque ela leu o DDL, os padrões e a rule do projeto antes de planejar. É isso que nivela o time: a regra está escrita, versionada e vale para todo pedido, de quem entrou ontem e de quem tem 20 anos de casa.
 
@@ -535,6 +552,11 @@ Nesta tarefa, você usa a mesma `my-task` para construir um agente ADK que lê a
     ./scripts/check_progress.sh 4
     ```
 
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=3>
+Construir o agente Painel com a my-task
+</ql-activity-tracking>
+
 > 💡 **Execução segura no agente:** o `tool_filter` do MCP entrega ao Painel só `execute_sql_readonly` (aceita apenas `SELECT`) e `get_table_info`. O agente lê a trilha, mas não tem ferramenta para alterá-la.
 
 ---
@@ -575,6 +597,11 @@ Nesta tarefa, você usa o `agy` com as skills do `agents-cli` para empacotar e p
     ```bash
     ./scripts/check_progress.sh 5
     ```
+
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=4>
+Fazer o deploy do agente no Agent Runtime
+</ql-activity-tracking>
 
 ---
 
@@ -633,6 +660,11 @@ Nesta tarefa, você dá ao agente publicado as permissões de leitura de que ele
     ./scripts/check_progress.sh 6
     ```
 
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=5>
+Dar ao agente as permissões do BigQuery e do MCP
+</ql-activity-tracking>
+
 ---
 
 ## Tarefa 7. Verificar a integridade, registrar a revisão humana e ver a turma no painel
@@ -681,6 +713,11 @@ Nesta tarefa, você confere que a trilha não foi alterada, lê o relatório, re
     node .agents/skills/my-task/scripts/status.mjs
     ./scripts/check_progress.sh all
     ```
+
+Clique em **Verificar meu progresso** para conferir o objetivo.
+<ql-activity-tracking step=6>
+Registrar a revisão humana e enviar a trilha ao BigQuery
+</ql-activity-tracking>
 
 > ⚖️ **O que este laboratório cobre e o que não cobre**  
 > **Cobre:** quem pediu o quê ao `agy`, qual modelo respondeu, sob quais regras (com hash), cada ferramenta e subagente, cada arquivo alterado, o que foi bloqueado, a ligação entre requisito e teste, quem revisou, e tudo isso visível no painel do time.  
