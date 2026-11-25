@@ -23,12 +23,12 @@ flowchart LR
 
 ## Quando fazer cada parte
 
-| Quando | O quê | Tempo |
-| :--- | :--- | :--- |
-| Uma semana antes | Partes 1 a 6: projeto, hub, ensaio do lab, agente, Gemini Enterprise | ~2 h |
-| Na véspera | Parte 7: limpar o ensaio, token novo, teste de fumaça | 15 min |
-| No dia | Parte 8: telão | — |
-| Depois do evento | Parte 9: desligar e apagar | 5 min |
+| Quando           | O quê                                                                | Tempo  |
+| :--------------- | :------------------------------------------------------------------- | :----- |
+| Uma semana antes | Partes 1 a 6: projeto, hub, ensaio do lab, agente, Gemini Enterprise | ~2 h   |
+| Na véspera       | Parte 7: limpar o ensaio, token novo, smoke test                     | 15 min |
+| No dia           | Parte 8: telão                                                       | —      |
+| Depois do evento | Parte 9: desligar e apagar                                           | 5 min  |
 
 > ⚠️ **Use a sua conta, não a de estudante.** Faça tudo num perfil do Chrome só seu (não na janela anônima do Qwiklabs). No dia do evento, deixe o projeto central num perfil e um lab de teste do Qwiklabs em outro, para não misturar as contas.
 
@@ -100,7 +100,7 @@ O que o Qwiklabs faz sozinho no projeto do aluno (`terraform/scripts/script.sh`)
    printf 'PAINEL_URL=%s\nPAINEL_TOKEN=%s\nPAINEL_SALA=%s\n' "$PAINEL_URL" "$PAINEL_TOKEN" "$PAINEL_SALA" > ~/painel-central.env
    ```
 
-3. 💻 **Terminal Cloud Shell (`$`):** teste de fumaça: mande um evento falso, como se fosse um participante:
+3. 💻 **Terminal Cloud Shell (`$`):** smoke test: mande um evento falso, como se fosse um participante:
 
    ```bash
    source ~/painel-central.env
@@ -146,13 +146,13 @@ O que o Qwiklabs faz sozinho no projeto do aluno (`terraform/scripts/script.sh`)
 
 Para o agente Painel ter dados de verdade e para você ensaiar, rode as Tarefas 1 a 4 do `lab_instructions.md` **no seu Cloud Shell**, com estas diferenças:
 
-| Passo do roteiro | No projeto central |
-| :--- | :--- |
-| Tarefa 1, variáveis | Já feito na Parte 1. Pule o bloco de variáveis. |
-| Tarefa 1, autenticação do `agy` | Use a **sua** conta. No passo 5, cole o ID do projeto central. No passo 4, **Pay As You Go**. |
-| Tarefa 1, `/model` | Escolha o mesmo modelo da turma (**Gemini 3.8 Flash**), para ensaiar com o mesmo comportamento. |
-| Tarefa 2, passo 5 (`conectar-painel.mjs`) | Use **`--sem-central`** (veja abaixo). |
-| Tarefa 2, "Verificar meu progresso" | Não existe fora do Qwiklabs. Use só `./scripts/check_progress.sh N`. |
+| Passo do roteiro                          | No projeto central                                                                              |
+| :---------------------------------------- | :---------------------------------------------------------------------------------------------- |
+| Tarefa 1, variáveis                       | Já feito na Parte 1. Pule o bloco de variáveis.                                                 |
+| Tarefa 1, autenticação do `agy`           | Use a **sua** conta. No passo 5, cole o ID do projeto central. No passo 4, **Pay As You Go**.   |
+| Tarefa 1, `/model`                        | Escolha o mesmo modelo da turma (**Gemini 3.8 Flash**), para ensaiar com o mesmo comportamento. |
+| Tarefa 2, passo 5 (`conectar-painel.mjs`) | Use **`--sem-central`** (veja abaixo).                                                          |
+| Tarefa 2, "Verificar meu progresso"       | Não existe fora do Qwiklabs. Use só `./scripts/check_progress.sh N`.                            |
 
 Na Tarefa 2, passo 5, ligue a telemetria assim:
 
@@ -223,7 +223,7 @@ Ao fim da Tarefa 4, confirme no ADK Web que o Painel responde com os seus dados.
    Resumo de hoje por pessoa: ações, bloqueios, quality gate e revisão.
    ```
 
-   Deve aparecer `Apresentador` (do ensaio) e `Teste Apresentador` (do teste de fumaça). Guarde o link do Preview: é a segunda tela do telão.
+   Deve aparecer `Apresentador` (do ensaio) e `Teste Apresentador` (do smoke test). Guarde o link do Preview: é a segunda tela do telão.
 
 ---
 
@@ -263,7 +263,7 @@ O token do ensaio já circulou por terminais e telas: troque. E a tabela deve co
 
    > O `bq rm` é necessário: o `DELETE` do BigQuery não apaga linhas que ainda estão no buffer de streaming (até ~90 min depois do envio).
 
-3. 💻 **Terminal Cloud Shell (`$`):** repita o teste de fumaça da Parte 2, passo 3, com `"participante":"Apresentador"`: assim a tabela não começa vazia e você confere o token novo.
+3. 💻 **Terminal Cloud Shell (`$`):** repita o smoke test da Parte 2, passo 3, com `"participante":"Apresentador"`: assim a tabela não começa vazia e você confere o token novo.
 
 4. Confira que o teste gratuito do Gemini Enterprise e o faturamento estão ativos.
 
@@ -271,25 +271,25 @@ O token do ensaio já circulou por terminais e telas: troque. E a tabela deve co
 
 ## Parte 8. No dia: o que deixar aberto no telão
 
-| Aba | O quê | Quando mostrar |
-| :--- | :--- | :--- |
-| 1 | Slide ou texto grande com a **URL** e o **TOKEN** | Tarefa 2 |
-| 2 | **Sala ao vivo** (`$PAINEL_SALA`): a tela principal. Clique em quem travou ou em quem já chegou longe | Da Tarefa 2 até o fim |
-| 3 | **Logs Explorer**, consulta salva `Telão my-task`, **Stream logs** ligado: os bloqueios em `WARNING`, linha a linha | Tarefa 2 (execução segura) |
-| 4 | **BigQuery Studio** com a consulta de contagem por pessoa (abaixo) | Quando quiser mostrar que é SQL comum |
-| 5 | **Gemini Enterprise**, app Painel da Turma, agente Painel my-task | Tarefa 7, para fechar |
+| Aba | O quê                                                                                                               | Quando mostrar                        |
+| :-- | :------------------------------------------------------------------------------------------------------------------ | :------------------------------------ |
+| 1   | Slide ou texto grande com a **URL** e o **TOKEN**                                                                   | Tarefa 2                              |
+| 2   | **Sala ao vivo** (`$PAINEL_SALA`): a tela principal. Clique em quem travou ou em quem já chegou longe               | Da Tarefa 2 até o fim                 |
+| 3   | **Logs Explorer**, consulta salva `Telão my-task`, **Stream logs** ligado: os bloqueios em `WARNING`, linha a linha | Tarefa 2 (execução segura)            |
+| 4   | **BigQuery Studio** com a consulta de contagem por pessoa (abaixo)                                                  | Quando quiser mostrar que é SQL comum |
+| 5   | **Gemini Enterprise**, app Painel da Turma, agente Painel my-task                                                   | Tarefa 7, para fechar                 |
 
 > **Sala e Gemini Enterprise se completam.** O Gemini Enterprise responde em conversa e não hospeda uma tela própria que se atualiza sozinha; por isso a sala é uma página do hub. A sala mostra **o agora** (quem está trabalhando, em que etapa, o que a IA acabou de fazer); o agente responde **as perguntas** (diligência, resumo do dia, por que alguém foi bloqueado). Uma boa passagem no fechamento: aponte uma pessoa na sala e peça ao agente a diligência da task dela.
 
 **Como ler a sala:**
 
-| Na mesa | Significa |
-| :--- | :--- |
-| Anel verde pulsando, **IA trabalhando** | Chegou evento da IA nos últimos 3 min: escrevendo código, rodando comando, acionando subagente, corrigindo teste |
-| Anel amarelo, **Esperando** | A IA parou e espera a pessoa: uma pergunta da entrevista, o plano para aprovar ou a revisão humana |
-| Anel cinza, **Parada** / apagada, **Inativa** | Sem evento da IA há mais de 3 min / há mais de 15 min |
-| Selo vermelho **bloqueio** | Um hook bloqueou uma ação no último minuto |
-| Barra de 6 etapas | Entrevista → Plano → Execução → Verificação → Concluída → Revisada, com os critérios de pronto do `DONE.md` (`3/5 critérios`) |
+| Na mesa                                       | Significa                                                                                                                     |
+| :-------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| Anel verde pulsando, **IA trabalhando**       | Chegou evento da IA nos últimos 3 min: escrevendo código, rodando comando, acionando subagente, corrigindo teste              |
+| Anel amarelo, **Esperando**                   | A IA parou e espera a pessoa: uma pergunta da entrevista, o plano para aprovar ou a revisão humana                            |
+| Anel cinza, **Parada** / apagada, **Inativa** | Sem evento da IA há mais de 3 min / há mais de 15 min                                                                         |
+| Selo vermelho **bloqueio**                    | Um hook bloqueou uma ação no último minuto                                                                                    |
+| Barra de 6 etapas                             | Entrevista → Plano → Execução → Verificação → Concluída → Revisada, com os critérios de pronto do `DONE.md` (`3/5 critérios`) |
 
 Consulta para a aba 3:
 
@@ -330,16 +330,16 @@ Perguntas para o Painel da Turma estão em `painel-central/README.md`, seção "
 
 ## Problemas comuns no projeto central
 
-| Sintoma | O que fazer |
-| :--- | :--- |
-| `deploy.sh` falha em `--allow-unauthenticated` | Política de organização contra `allUsers`. Use um projeto fora da organização (Parte 1). |
-| `/saude` responde, mas `/eventos` devolve `502` | A conta `painel-hub` não grava na tabela. Rode o `deploy.sh` de novo (ele refaz o papel) e confira se a tabela existe. |
-| Nada aparece no Logs Explorer | Confira a consulta (`service_name="painel-hub"`) e o intervalo de tempo; ligue **Stream logs**. |
-| Os seus eventos do ensaio não aparecem no Logs Explorer nem na sala | Esperado com `--sem-central`: eles vão direto ao BigQuery. |
-| A sala abre, mas diz "Chave da sala inválida" | O link é de um deploy anterior: o `deploy.sh` gera uma chave nova a cada execução, a não ser que você passe `PAINEL_VIEW_TOKEN=...`. |
-| A sala fica em "reconectando" | O hub reiniciou ou a rede caiu; a página reconecta sozinha em segundos. Se o hub reiniciou, o histórico volta do BigQuery em instantes. |
+| Sintoma                                                                 | O que fazer                                                                                                                                                                                                  |
+| :---------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deploy.sh` falha em `--allow-unauthenticated`                          | Política de organização contra `allUsers`. Use um projeto fora da organização (Parte 1).                                                                                                                     |
+| `/saude` responde, mas `/eventos` devolve `502`                         | A conta `painel-hub` não grava na tabela. Rode o `deploy.sh` de novo (ele refaz o papel) e confira se a tabela existe.                                                                                       |
+| Nada aparece no Logs Explorer                                           | Confira a consulta (`service_name="painel-hub"`) e o intervalo de tempo; ligue **Stream logs**.                                                                                                              |
+| Os seus eventos do ensaio não aparecem no Logs Explorer nem na sala     | Esperado com `--sem-central`: eles vão direto ao BigQuery.                                                                                                                                                   |
+| A sala abre, mas diz "Chave da sala inválida"                           | O link é de um deploy anterior: o `deploy.sh` gera uma chave nova a cada execução, a não ser que você passe `PAINEL_VIEW_TOKEN=...`.                                                                         |
+| A sala fica em "reconectando"                                           | O hub reiniciou ou a rede caiu; a página reconecta sozinha em segundos. Se o hub reiniciou, o histórico volta do BigQuery em instantes.                                                                      |
 | Uma pessoa aparece com a task anterior durante a entrevista de uma nova | A pasta da task nova só existe depois da entrevista; a sala reconhece o `/my-task <pedido>` e mostra "Entrevista", mas se a pessoa pediu em outras palavras, a task nova aparece quando o plano for escrito. |
-| Linhas duplicadas na tabela | Você ligou a telemetria com `--url` e com o projeto central como local. Refaça `conectar-painel.mjs` com `--sem-central`. |
-| `Create your first app` não aparece no Gemini Enterprise | O Gemini Enterprise não está ativado no projeto (Parte 5, passo 1). |
-| O Painel responde "sem permissão" | Papéis da Parte 4, passo 2, na conta de serviço certa do agente. |
-| `constraints/vertexai.allowedModels violated` no `agy` | Política da organização. Escolha um modelo liberado em `/model` ou use um projeto fora da organização. |
+| Linhas duplicadas na tabela                                             | Você ligou a telemetria com `--url` e com o projeto central como local. Refaça `conectar-painel.mjs` com `--sem-central`.                                                                                    |
+| `Create your first app` não aparece no Gemini Enterprise                | O Gemini Enterprise não está ativado no projeto (Parte 5, passo 1).                                                                                                                                          |
+| O Painel responde "sem permissão"                                       | Papéis da Parte 4, passo 2, na conta de serviço certa do agente.                                                                                                                                             |
+| `constraints/vertexai.allowedModels violated` no `agy`                  | Política da organização. Escolha um modelo liberado em `/model` ou use um projeto fora da organização.                                                                                                       |
