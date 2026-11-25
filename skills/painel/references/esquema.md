@@ -19,6 +19,11 @@ Uma linha por evento da trilha de auditoria da my-task. Cada participante e work
 | `arquivos` | Arquivos alterados (lista) |
 | `pedido` | O que a pessoa pediu ao agy |
 | `task` | Projeto e título do plano, ex.: `frota-api: horas de voo por aeronave` |
+| `task_pasta` | Pasta da task atual, ex.: `frota-api/.my-task/2026-11-25-horas-de-voo` (identifica a task) |
+| `task_status` | `status:` do `STATE.md` naquele momento: `rascunho`, `em execução`, `concluído`, `bloqueado`, `cancelado` |
+| `task_fase`, `task_proximo` | `fase:` e `proximo_passo:` do `STATE.md`, como a IA escreveu |
+| `reqs` | Quantos `REQ-xx` o plano tem |
+| `criterios_ok`, `criterios_total` | Critérios do `DONE.md` marcados `[x]` e o total: o progresso da task |
 | `detalhe` | Resumo dos argumentos da ferramenta (JSON em texto) |
 | `hash`, `prev_hash` | Cadeia de integridade |
 
@@ -34,6 +39,7 @@ Uma linha por evento da trilha de auditoria da my-task. Cada participante e work
 | `PostToolUse` | A ferramenta rodou; `arquivos` traz o que mudou |
 | `Stop` | A IA tentou encerrar |
 | `QualityGate` | Os testes rodaram no encerramento; ver `resultado` |
+| `GoalCheck` | A task está em execução e a IA foi mandada continuar; o que falta está em `detalhe` |
 | `HumanReview` | Uma pessoa registrou a revisão no terminal |
 
 ## Ferramentas que importam

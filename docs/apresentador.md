@@ -27,7 +27,7 @@ São duas execuções longas em modo goal (Tarefas 3 e 4), que começam sozinhas
 ## Checklist antes do evento
 
 - [ ] Publicar este repositório como `github.com/marcuspmd/workshop-agy-embraer` (público), ou trocar a URL do `git clone` no roteiro.
-- [ ] Preparar o painel central (`painel-central/README.md`): hub no Cloud Run, URL, TOKEN, agente central e app no Gemini Enterprise.
+- [ ] Preparar o painel central num projeto próprio, fora do Qwiklabs (`docs/apresentador-projeto-central.md`): hub no Cloud Run, URL, TOKEN, agente central e app no Gemini Enterprise.
 - [ ] Testar o envio de um projeto Qwiklabs para o hub central (`conectar-painel.mjs` → linha no Logs Explorer do projeto central em segundos).
 - [ ] Qwiklabs: colar o `lab_instructions.md` na aba **Instructions** e enviar o `qwiklabs/Archive.zip` no recurso `project_0` (**Update Lab Resource**).
 - [ ] Qwiklabs, **Student Visible Outputs**: `project_0.console_url`, `project_0.project_id`, `user_0.username`, `user_0.password`, `project_0.default_region`.

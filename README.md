@@ -44,6 +44,8 @@ flowchart LR
 
         hub --> bqCentral
         hub --> logging
+        sala["Sala ao vivo /sala<br/>(telão)"]
+        hub --> sala
         gemini --> bqCentral
     end
 
@@ -86,8 +88,9 @@ workshop-agy-embraer/
 │   └── diligencia/                      # ADK Skill: parecer sobre se uma task seguiu o processo
 ├── docs/
 │   ├── referencia-adk.md                # padrões de código ADK testados (skills, tabela_do_painel, MCP do BigQuery)
-│   └── apresentador.md                  # tempo, checklist do evento e problemas comuns
-├── painel-central/                      # projeto central do apresentador: hub no Cloud Run, schema e deploy.sh
+│   ├── apresentador.md                  # tempo, checklist do evento e problemas comuns
+│   └── apresentador-projeto-central.md  # passo a passo do projeto central do apresentador (fora do Qwiklabs)
+├── painel-central/                      # projeto central do apresentador: hub no Cloud Run (com a sala ao vivo), schema, deploy.sh e simulador
 ├── scripts/check_progress.sh            # verificador de progresso do aluno (tarefas 1 a 7)
 ├── scripts/testes.sh                    # testes de todos os projetos (usado pelo quality gate)
 ├── terraform/                           # setup do projeto do aluno: APIs e dataset auditoria_ia
@@ -110,7 +113,7 @@ workshop-agy-embraer/
    - aba **Lab Resources**: no `project_0`, envie o `qwiklabs/Archive.zip` e clique em **Update Lab Resource**;
    - em **Student Visible Outputs**, marque `project_0.console_url`, `project_0.project_id`, `user_0.username`, `user_0.password` e `project_0.default_region`;
    - em **Activity Tracking**, crie os 6 passos de `qwiklabs/activity-tracking.md` (Tarefas 2 a 7) e teste cada um num lab de teste.
-4. Prepare o painel central (`painel-central/README.md`) e teste o lab de ponta a ponta seguindo `docs/apresentador.md`.
+4. Prepare o painel central (`docs/apresentador-projeto-central.md`) e teste o lab de ponta a ponta seguindo `docs/apresentador.md`.
 
 ## Limites
 

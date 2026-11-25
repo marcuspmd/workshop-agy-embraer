@@ -21,14 +21,32 @@ export function destinations(config) {
   return out;
 }
 
-function planTitle(root) {
-  // Título do plano da task mais recente (<projeto>/.my-task/<task>/PLAN.md), para saber de qual task é o evento.
+function readText(file) {
+  try {
+    return fs.readFileSync(file, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
+function stateField(text, field) {
+  const m = text?.match(new RegExp(`^\\s*${field}:\\s*(.+?)\\s*$`, 'im'));
+  const v = m?.[1].replace(/[*_`]/g, '').trim();
+  return v && !v.startsWith('<') ? v.slice(0, 300) : null;
+}
+
+/**
+ * A task atual do workspace (<projeto>/.my-task/<task>/): a que está "em execução" mais recente
+ * ou, se não houver, a de STATE.md alterado por último. Vai em cada evento para o painel saber
+ * em que task, etapa e progresso a pessoa está.
+ */
+export function currentTask(root) {
   const taskDir = loadConfig(root).config.tasks?.dir || '.my-task';
-  const candidates = [];
+  const dirs = [];
   const scan = (base) => {
     try {
       for (const t of fs.readdirSync(base, { withFileTypes: true })) {
-        if (t.isDirectory()) candidates.push(path.join(base, t.name, 'PLAN.md'));
+        if (t.isDirectory()) dirs.push(path.join(base, t.name));
       }
     } catch {
       // projeto sem tasks
@@ -42,14 +60,35 @@ function planTitle(root) {
   } catch {
     return null;
   }
-  const found = candidates
-    .filter((f) => fs.existsSync(f))
-    .map((f) => ({ f, m: fs.statSync(f).mtimeMs }))
-    .sort((a, b) => b.m - a.m)[0];
-  if (!found) return null;
-  const first = fs.readFileSync(found.f, 'utf8').split('\n').find((l) => l.startsWith('# '));
-  const project = path.relative(root, path.dirname(path.dirname(path.dirname(found.f)))) || '.';
-  return `${project}: ${(first ?? '# (sem título)').replace(/^#\s*(Plano\s*[—-]\s*)?/, '').trim()}`.slice(0, 200);
+  const tasks = dirs
+    .filter((d) => fs.existsSync(path.join(d, 'PLAN.md')))
+    .map((d) => {
+      const state = readText(path.join(d, 'STATE.md'));
+      const status = stateField(state, 'status');
+      let m = 0;
+      for (const f of ['STATE.md', 'PLAN.md']) {
+        try { m = Math.max(m, fs.statSync(path.join(d, f)).mtimeMs); } catch { /* sem arquivo */ }
+      }
+      return { d, state, status, m, running: /execu/i.test(status ?? '') };
+    })
+    .sort((a, b) => (b.running - a.running) || (b.m - a.m));
+  const t = tasks[0];
+  if (!t) return null;
+  const first = readText(path.join(t.d, 'PLAN.md')).split('\n').find((l) => l.startsWith('# '));
+  const project = path.relative(root, path.dirname(path.dirname(t.d))) || '.';
+  const plan = readText(path.join(t.d, 'PLAN.md')) ?? '';
+  const done = readText(path.join(t.d, 'DONE.md')) ?? '';
+  const criteria = done.split('\n').filter((l) => /^\s*-\s*\[[ x!]\]\s*\*\*D\d+/i.test(l));
+  return {
+    title: `${project}: ${(first ?? '# (sem título)').replace(/^#\s*(Plano\s*[—-]\s*)?/, '').trim()}`.slice(0, 200),
+    folder: path.relative(root, t.d),
+    status: t.status,
+    fase: stateField(t.state, 'fase'),
+    proximo: stateField(t.state, 'proximo_passo'),
+    reqs: new Set(plan.match(/\bREQ-\d+\b/g) ?? []).size,
+    criteriaOk: criteria.filter((l) => /\[x\]/i.test(l)).length,
+    criteriaTotal: criteria.length,
+  };
 }
 
 function short(value, max = 500) {
@@ -64,6 +103,7 @@ export function toRow(root, record, config) {
   let resultado = null;
   if (record.event === 'QualityGate') resultado = record.passed === true ? 'passou' : record.passed === false ? 'falhou' : 'inconclusivo';
   if (record.event === 'HumanReview') resultado = record.decision ?? null;
+  const task = currentTask(root);
   return {
     ts: record.ts,
     participante: t.participant || record.reviewer || record.osUser || os.userInfo().username,
@@ -80,8 +120,15 @@ export function toRow(root, record, config) {
     resultado,
     arquivos: (record.files ?? []).map((f) => f.path).slice(0, 50),
     pedido: short(record.userInput, 500),
-    task: planTitle(root),
-    detalhe: short(record.args ?? record.command ?? record.note ?? null, 1500),
+    task: task?.title ?? null,
+    task_pasta: task?.folder ?? null,
+    task_status: task?.status ?? null,
+    task_fase: task?.fase ?? null,
+    task_proximo: task?.proximo ?? null,
+    reqs: task?.reqs ?? null,
+    criterios_ok: task?.criteriaOk ?? null,
+    criterios_total: task?.criteriaTotal ?? null,
+    detalhe: short(record.args ?? record.command ?? record.note ?? (record.event === 'GoalCheck' ? { falta: record.missing, continuacao: record.continues } : null), 1500),
     hash: record.hash,
     prev_hash: record.prevHash,
   };

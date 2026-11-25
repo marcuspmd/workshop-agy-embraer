@@ -53,7 +53,10 @@ cat > "${SCHEMA_FILE}" << 'SCHEMA'
   {"name": "modelo", "type": "STRING"}, {"name": "ferramenta", "type": "STRING"}, {"name": "decisao", "type": "STRING"},
   {"name": "motivo", "type": "STRING"}, {"name": "resultado", "type": "STRING"},
   {"name": "arquivos", "type": "STRING", "mode": "REPEATED"}, {"name": "pedido", "type": "STRING"},
-  {"name": "task", "type": "STRING"}, {"name": "detalhe", "type": "STRING"},
+  {"name": "task", "type": "STRING"}, {"name": "task_pasta", "type": "STRING"},
+  {"name": "task_status", "type": "STRING"}, {"name": "task_fase", "type": "STRING"}, {"name": "task_proximo", "type": "STRING"},
+  {"name": "reqs", "type": "INTEGER"}, {"name": "criterios_ok", "type": "INTEGER"}, {"name": "criterios_total", "type": "INTEGER"},
+  {"name": "detalhe", "type": "STRING"},
   {"name": "hash", "type": "STRING"}, {"name": "prev_hash", "type": "STRING"}, {"name": "recebido_em", "type": "TIMESTAMP"}
 ]
 SCHEMA
