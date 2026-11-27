@@ -31,7 +31,7 @@ O painel central recebe os eventos da `my-task` de todos os participantes e most
 
 ## Segurança
 
-- O hub é público, protegido por um token compartilhado com a turma. Use um token novo por evento (`PAINEL_TOKEN=... ./painel-central/deploy.sh`) e apague o serviço depois (`gcloud run services delete painel-hub`).
+- O hub é público, protegido por um token compartilhado com a turma. Use um token novo por evento (`NOVO_TOKEN=1 ./painel-central/deploy.sh`; sem isso, um novo deploy mantém o token) e apague o serviço depois (`gcloud run services delete painel-hub`).
 - A sala tem uma chave própria (`PAINEL_VIEW_TOKEN`), diferente do token da turma: quem tem o token só consegue enviar eventos, não ver a sala.
 - O hub aceita só as colunas da tabela, corta textos longos e não recebe conteúdo de arquivos: só nomes, hashes, ferramentas e decisões.
 - Se a política da sua organização proibir serviços públicos (`allUsers`) no Cloud Run, use um projeto fora dessa política.

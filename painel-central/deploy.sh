@@ -1,6 +1,9 @@
 #!/bin/bash
 # Prepara o projeto CENTRAL do apresentador: dataset do painel, hub no Cloud Run e o token.
 # Uso: PROJECT_ID=<projeto-central> ./painel-central/deploy.sh   (rode da raiz do repositório)
+#      NOVO_TOKEN=1 PROJECT_ID=... ./painel-central/deploy.sh   troca o token da turma e a chave da sala
+# Rodar de novo mantém o token e a chave do serviço já publicado. URL, token e link da sala ficam
+# gravados em ~/painel-central.env (fora do repositório).
 # Uma instância só (min = max = 1): a sala ao vivo guarda o estado da turma em memória
 # e o reconstrói do BigQuery quando o serviço reinicia.
 set -euo pipefail
@@ -9,6 +12,17 @@ PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project)}"
 REGION="${REGION:-us-central1}"
 DATASET="auditoria_ia"
 TABELA="eventos"
+ENV_FILE="${HOME}/painel-central.env"
+
+# Token e chave do serviço já publicado: um novo deploy não invalida o que a turma e o telão já usam.
+env_do_servico() {
+  gcloud run services describe painel-hub --region "${REGION}" --project "${PROJECT_ID}" --format=json 2>/dev/null \
+    | python3 -c "import json,sys; e=json.load(sys.stdin)['spec']['template']['spec']['containers'][0].get('env',[]); print(next((v.get('value','') for v in e if v['name']=='$1'),''))" 2>/dev/null || true
+}
+if [ "${NOVO_TOKEN:-0}" != "1" ]; then
+  PAINEL_TOKEN="${PAINEL_TOKEN:-$(env_do_servico PAINEL_TOKEN)}"
+  PAINEL_VIEW_TOKEN="${PAINEL_VIEW_TOKEN:-$(env_do_servico PAINEL_VIEW_TOKEN)}"
+fi
 TOKEN="${PAINEL_TOKEN:-$(openssl rand -hex 12)}"
 VIEW_TOKEN="${PAINEL_VIEW_TOKEN:-$(openssl rand -hex 12)}"
 SA="painel-hub@${PROJECT_ID}.iam.gserviceaccount.com"
@@ -40,6 +54,9 @@ gcloud run deploy painel-hub --source "${DIR}/hub" --region "${REGION}" --projec
 
 URL="$(gcloud run services describe painel-hub --region "${REGION}" --project "${PROJECT_ID}" --format 'value(status.url)')"
 curl -fsS "${URL}/saude" && echo
+umask 077
+printf 'export PAINEL_URL=%s\nexport PAINEL_TOKEN=%s\nexport PAINEL_SALA=%s\n' \
+  "${URL}" "${TOKEN}" "${URL}/sala?k=${VIEW_TOKEN}" > "${ENV_FILE}"
 echo
 echo "== Pronto. Passe para a turma (Tarefa 2 do roteiro): =="
 echo "   URL:   ${URL}"
@@ -48,4 +65,5 @@ echo
 echo "== Sala ao vivo (só para o telão, NÃO passe para a turma): =="
 echo "   ${URL}/sala?k=${VIEW_TOKEN}"
 echo
+echo "Gravado em ${ENV_FILE}. Em cada terminal novo: source ${ENV_FILE}"
 echo "Ao vivo no telão: Logs Explorer de ${PROJECT_ID}, filtro jsonPayload.tipo=\"my-task\", com Stream logs ligado."

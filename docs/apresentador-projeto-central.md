@@ -91,16 +91,16 @@ O que o Qwiklabs faz sozinho no projeto do aluno (`terraform/scripts/script.sh`)
 
    > O hub roda com **uma instância só, sempre ligada** (`--min-instances 1 --max-instances 1`): a sala guarda o estado da turma em memória e, se o serviço reiniciar, refaz o estado com as últimas 24 h do BigQuery. Uma instância dá conta de uma turma com folga. A instância ligada custa enquanto o serviço existir: apague-o depois do evento (Parte 9).
 
-2. 💻 **Terminal Cloud Shell (`$`):** guarde os dois numa variável e num arquivo fora do repositório (o token **não** vai para o git):
+2. 💻 **Terminal Cloud Shell (`$`):** carregue a URL, o token e o link da sala. O `deploy.sh` grava os três em `~/painel-central.env` (fora do repositório; o token **não** vai para o git). Faça isso em toda aba nova do terminal:
 
    ```bash
-   export PAINEL_URL=<URL mostrada>
-   export PAINEL_TOKEN=<TOKEN mostrado>
-   export PAINEL_SALA=<link da sala mostrado>
-   printf 'PAINEL_URL=%s\nPAINEL_TOKEN=%s\nPAINEL_SALA=%s\n' "$PAINEL_URL" "$PAINEL_TOKEN" "$PAINEL_SALA" > ~/painel-central.env
+   source ~/painel-central.env
+   echo "URL=[$PAINEL_URL] TOKEN=[$PAINEL_TOKEN]"
    ```
 
-3. 💻 **Terminal Cloud Shell (`$`):** smoke test: mande um evento falso, como se fosse um participante:
+   Os dois colchetes precisam ter valor. Rodar o `deploy.sh` de novo (por exemplo, depois de um `git pull`) **mantém** o token e a chave da sala; para trocar, use `NOVO_TOKEN=1` (Parte 7).
+
+3. 💻 **Terminal Cloud Shell (`$`):** teste de fumaça: mande um evento falso, como se fosse um participante:
 
    ```bash
    source ~/painel-central.env
@@ -109,7 +109,7 @@ O que o Qwiklabs faz sozinho no projeto do aluno (`terraform/scripts/script.sh`)
      -d '{"rows":[{"ts":"'"$(date -u +%FT%TZ)"'","hash":"fumaca-'"$RANDOM"'","participante":"Teste Apresentador","evento":"SessionStart","ator":"human"}]}'; echo
    ```
 
-   Deve voltar `{"recebidos":1}`. Com token errado, `401`.
+   Deve voltar `{"recebidos":1}`. Se voltar `{"detail":"token inválido"}`, o token do terminal não é o do serviço: rode `source ~/painel-central.env` e confira com o `echo` do passo 2. Se o arquivo for de antes desta versão do `deploy.sh`, rode o `deploy.sh` de novo: ele lê o token do serviço publicado e regrava o arquivo.
 
 4. ☁️ **Console Google Cloud (Logs Explorer):** abra **Logging → Logs Explorer**, cole a consulta abaixo e clique em **Executar consulta**. A linha `Teste Apresentador · SessionStart` deve aparecer:
 
@@ -256,10 +256,11 @@ O token do ensaio já circulou por terminais e telas: troque. E a tabela deve co
    ```bash
    cd ~/workshop-agy-embraer && git pull
    bq rm -f -t ${PROJECT_ID}:auditoria_ia.eventos
-   PROJECT_ID=$PROJECT_ID ./painel-central/deploy.sh
+   NOVO_TOKEN=1 PROJECT_ID=$PROJECT_ID ./painel-central/deploy.sh
+   source ~/painel-central.env
    ```
 
-   Atualize `~/painel-central.env` com a URL (a mesma), o **TOKEN novo** e o **link novo da sala** (a chave da sala também é trocada). É esse token que vai para o telão na Tarefa 2.
+   O `~/painel-central.env` já sai com o **TOKEN novo** e o **link novo da sala** (a chave da sala também é trocada). É esse token que vai para o telão na Tarefa 2.
 
    > O `bq rm` é necessário: o `DELETE` do BigQuery não apaga linhas que ainda estão no buffer de streaming (até ~90 min depois do envio).
 
@@ -336,7 +337,8 @@ Perguntas para o Painel da Turma estão em `painel-central/README.md`, seção "
 | `/saude` responde, mas `/eventos` devolve `502`                         | A conta `painel-hub` não grava na tabela. Rode o `deploy.sh` de novo (ele refaz o papel) e confira se a tabela existe.                                                                                       |
 | Nada aparece no Logs Explorer                                           | Confira a consulta (`service_name="painel-hub"`) e o intervalo de tempo; ligue **Stream logs**.                                                                                                              |
 | Os seus eventos do ensaio não aparecem no Logs Explorer nem na sala     | Esperado com `--sem-central`: eles vão direto ao BigQuery.                                                                                                                                                   |
-| A sala abre, mas diz "Chave da sala inválida"                           | O link é de um deploy anterior: o `deploy.sh` gera uma chave nova a cada execução, a não ser que você passe `PAINEL_VIEW_TOKEN=...`.                                                                         |
+| `{"detail":"token inválido"}` no teste de fumaça | Variáveis vazias ou de outro deploy: `source ~/painel-central.env`. Se persistir, rode o `deploy.sh` de novo, que regrava o arquivo com o token do serviço. |
+| A sala abre, mas diz "Chave da sala inválida" | O link é de antes de um `NOVO_TOKEN=1`. Pegue o link novo: `source ~/painel-central.env && echo $PAINEL_SALA`. |
 | A sala fica em "reconectando"                                           | O hub reiniciou ou a rede caiu; a página reconecta sozinha em segundos. Se o hub reiniciou, o histórico volta do BigQuery em instantes.                                                                      |
 | Uma pessoa aparece com a task anterior durante a entrevista de uma nova | A pasta da task nova só existe depois da entrevista; a sala reconhece o `/my-task <pedido>` e mostra "Entrevista", mas se a pessoa pediu em outras palavras, a task nova aparece quando o plano for escrito. |
 | Linhas duplicadas na tabela                                             | Você ligou a telemetria com `--url` e com o projeto central como local. Refaça `conectar-painel.mjs` com `--sem-central`.                                                                                    |
