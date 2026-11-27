@@ -197,8 +197,6 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
     uvx google-agents-cli setup
     ```
 
-    ![Setup do agents-cli: autenticação, instalação da CLI e das skills](docs/assets/t1-agents-cli-setup.png)
-
 ### Autenticar o Antigravity CLI
 
 1.  💻 **Terminal Cloud Shell (`$`):** Na raiz do repositório, inicie o setup interativo do `agy`:
@@ -211,24 +209,15 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
 2.  🤖 **Setup Interativo do Antigravity CLI (`agy`):** Siga as etapas exibidas no terminal:
 
 - **Passo 1:** selecione **`2. Use a Google Cloud project`**;
-
-![Tela de login do agy com a opção Use a Google Cloud project](docs/assets/t1-agy-login-metodo.png)
-
 - **Passo 2:** selecione **`1. Continue with Google Cloud`**;
-
-![Método de login: Continue with Google Cloud](docs/assets/t1-agy-login-google-cloud.png)
-
 - **Passo 3:** abra o link de autorização (`CTRL+Clique`) numa nova aba da Janela Anônima, escolha a conta de estudante <ql-variable key="user_0.username"></ql-variable>, conceda o consentimento e cole o código de volta no terminal;
 
-![Link de autorização e campo para colar o código](docs/assets/t1-agy-login-url-autorizacao.png)
+  ![Link de autorização e campo para colar o código](docs/assets/t1-agy-login-url-autorizacao.png)
 
 - **Passo 4:** em **Select billing model**, desça até **`2. Pay As You Go`** e pressione `ENTER` (não confirme a opção `1. Subscriptions`, que vem selecionada);
 - **Passo 5:** em **Provide Google Cloud project**, cole o ID do projeto (<ql-variable key="project_0.project_id"></ql-variable>) e pressione `ENTER`;
 - **Passo 6:** em **Choose region**, selecione **`global`** e pressione `ENTER`;
 - **Passo 7:** escolha o tema de cores e, em **Migration options**, deixe **`Import extensions from Gemini CLI`** desmarcado; vá até **`Next`** e pressione `ENTER`;
-
-![Escolha do tema de cores e Migration options desmarcado](docs/assets/t1-agy-tema-migracao.png)
-
 - **Passo 8:** em **Terms of Service & Data Use**, vá até **`Done`** e pressione `ENTER`;
 - **Passo 9:** em **Do you trust the contents of this project?**, selecione **`Yes, I trust this folder`** e pressione `ENTER`.
 
@@ -258,8 +247,6 @@ O Antigravity é a plataforma de desenvolvimento agentic do Google. Ele está di
     ```
 
     ![Settings do agy com Tool Permission em always-proceed](docs/assets/t1-agy-config-tool-permission.png)
-
-    ![Lista de skills com a my-task e as google-agents-cli-*](docs/assets/t1-agy-skills.png)
 
 > 💡 **Comandos úteis do Antigravity CLI (`agy`):**
 >
@@ -323,8 +310,6 @@ Nesta tarefa, você instala a skill `my-task`, que cria as regras de workspace, 
 
     ![Primeira pergunta do /my-task init: idioma e linguagem](docs/assets/t2-my-task-init-idioma.png)
 
-    ![Perguntas seguintes: arquitetura e observações](docs/assets/t2-my-task-init-arquitetura.png)
-
 
     > 💡 Para exigir cobertura, responda **80%** e o comando `cd frota-api && uv run --with pytest-cov pytest -q --cov=app --cov-fail-under=80`. O hook não deixa a task encerrar abaixo do mínimo.
 
@@ -387,8 +372,6 @@ Nesta tarefa, você instala a skill `my-task`, que cria as regras de workspace, 
 
     ![O agy recusa apagar a trilha e registrar a revisão](docs/assets/t2-execucao-segura-bloqueios.png)
 
-    ![Painel da turma com os pedidos na linha do tempo ao vivo](docs/assets/t2-painel-bloqueios.png)
-
 12. 🤖 **Prompt do Antigravity CLI (`agy >`):** Rode o verificador da Tarefa 2 sem sair do `agy`:
 
     ```text
@@ -428,8 +411,6 @@ Nesta tarefa, você usa a `my-task` numa task de verdade: criar um endpoint novo
     cd ~/workshop-agy-embraer/frota-api && uv sync -q && uv run pytest -q && cd ..
     ```
 
-    ![3 testes passando na frota-api](docs/assets/t3-testes-iniciais.png)
-
 ### Planejar e codificar com a my-task
 
 1.  🤖 **Prompt do Antigravity CLI (`agy >`):** Na primeira aba, envie a task. O formato é sempre `/my-task <sua task>`, dizendo em qual projeto:
@@ -438,19 +419,11 @@ Nesta tarefa, você usa a `my-task` numa task de verdade: criar um endpoint novo
     /my-task No projeto frota-api, crie o endpoint GET /api/v1/aeronaves/{matricula}/horas-de-voo, que devolve o total de horas de voo e de ciclos da aeronave num período, com os parâmetros inicio e fim (datas ISO), seguindo os padrões do projeto.
     ```
 
-    ![Pedido /my-task digitado no agy](docs/assets/t3-my-task-pedido.png)
-
-    ![Editor com padroes.md, agy trabalhando e o painel da turma ao lado](docs/assets/t3-painel-ia-trabalhando.png)
-
 2.  🤖 **Prompt do Antigravity CLI (`agy >`):** A skill confere a instalação, lê o projeto e entrevista você, uma pergunta de cada vez, com a resposta recomendada. Ela pergunta até não sobrar lacuna no plano, com o limite definido em `grill.max_questions` no `.ai/my-task.json` (padrão: 10). Se concordar com a recomendada, responda só `ok`.
 
     ![Pergunta da entrevista com a resposta recomendada](docs/assets/t3-entrevista-pergunta.png)
 
-    ![Detalhe no painel: task nova na etapa Entrevista](docs/assets/t3-painel-detalhe-entrevista.png)
-
 3.  🤖 **Prompt do Antigravity CLI (`agy >`):** Revise o resumo do plano e aprove. Se quiser, abra a pasta da task no Editor, `frota-api/.my-task/<data>-horas-de-voo/`: o `REQUEST.md` guarda o pedido e as suas respostas, o `PLAN.md` tem os requisitos numerados (`REQ-01`, `REQ-02`…), as diretrizes aplicadas e a divisão do trabalho entre os subagentes, e o `DONE.md` tem os critérios de pronto.
-
-    ![agy escrevendo REQUEST.md, PLAN.md e DONE.md; a task aparece como rascunho no painel](docs/assets/t3-plano-rascunho.png)
 
     ![Resumo do plano com REQs e critérios de aceite, aguardando aprovação](docs/assets/t3-plano-aprovacao.png)
 
